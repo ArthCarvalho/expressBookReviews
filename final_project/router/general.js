@@ -54,7 +54,7 @@ public_users.get('/author/:author',function (req, res) {
     const keys = Object.keys(books);
     let bookMatches = [];
     keys.forEach((key, index) => {
-        if(books[key].author == author) {
+        if(books[key].author.includes(author)) {
             bookMatches.push(books[key]);
         }
     });
@@ -67,7 +67,7 @@ public_users.get('/title/:title',function (req, res) {
     const keys = Object.keys(books);
     let bookMatches = [];
     keys.forEach((key, index) => {
-        if(books[key].title == title) {
+        if(books[key].title.includes(title)) {
             bookMatches.push(books[key]);
         }
     });
