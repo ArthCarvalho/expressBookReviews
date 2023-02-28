@@ -35,43 +35,50 @@ public_users.post("/register", (req,res) => {
     });
 });
 
-// Get the book list available in the shop
-public_users.get('/',function (req, res) {
-  return res.status(200).json(books);
-});
+public_users.get('/', async (req, res) => 
+    new Promise((resolve, reject) => {
+        resolve(books);
+    }).then(result => res.status(200).json(result))
+);
 
 // Get book details based on ISBN
-public_users.get('/isbn/:isbn',function (req, res) {
+public_users.get('/isbn/:isbn',async (req, res) => {
     const { isbn } = req.params;
     if(isbn) {
-        res.status(200).send(JSON.stringify(books[isbn], null, 4));
+        return new Promise((resolve, reject) => {
+            resolve(books[isbn]);
+        }).then(result => res.status(200).json(result));
     }
- });
+});
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
+public_users.get('/author/:author',async (req, res) => {
     const { author } = req.params;
-    const keys = Object.keys(books);
-    let bookMatches = [];
-    keys.forEach((key, index) => {
-        if(books[key].author.includes(author)) {
-            bookMatches.push(books[key]);
-        }
-    });
-    return res.status(200).send(JSON.stringify(bookMatches, null, 4));
+    return new Promise((resolve, reject) => {
+        const keys = Object.keys(books);
+        let bookMatches = [];
+        keys.forEach((key, index) => {
+            if(books[key].author.includes(author)) {
+                bookMatches.push(books[key]);
+            }
+        });
+        resolve(bookMatches);
+    }).then(result => res.status(200).json(result));
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
+public_users.get('/title/:title',async (req, res) => {
     const { title } = req.params;
-    const keys = Object.keys(books);
-    let bookMatches = [];
-    keys.forEach((key, index) => {
-        if(books[key].title.includes(title)) {
-            bookMatches.push(books[key]);
-        }
-    });
-    return res.status(200).send(JSON.stringify(bookMatches, null, 4));
+    return new Promise((resolve, reject) => {
+        const keys = Object.keys(books);
+        let bookMatches = [];
+        keys.forEach((key, index) => {
+            if(books[key].title.includes(title)) {
+                bookMatches.push(books[key]);
+            }
+        });
+        resolve(bookMatches);
+    }).then(result => res.status(200).json(result));
 });
 
 //  Get book review
